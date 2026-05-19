@@ -9,6 +9,7 @@ class_name CountDown2D
 @export var count_length : float = 1.0
 @export var autostart : bool = false
 @export var one_shot : bool = false
+@export var destroy_on_finish : bool = false;
 
 signal countdown_finished()
 
@@ -47,4 +48,6 @@ func count_down() -> void:
 	else:
 		if one_shot:
 			_running = false
+			if destroy_on_finish:
+				queue_free();
 		emit_signal("countdown_finished")
