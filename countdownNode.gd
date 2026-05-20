@@ -2,14 +2,14 @@
 extends NumbersUI2D
 class_name CountDown2D
 
-@export var count : int = 10:
+@export var count : int = 10: ## Starting value of the countdown; resets the displayed number when changed
 	set(val):
 		count = val
 		number = val
-@export var count_length : float = 1.0
-@export var autostart : bool = false
-@export var one_shot : bool = false
-@export var destroy_on_finish : bool = false;
+@export var count_length : float = 1.0 ## Duration in seconds between each decrement
+@export var autostart : bool = false ## If true, the countdown starts automatically when the node enters the scene
+@export var one_shot : bool = false ## If true, the countdown stops (and optionally destroys itself) when it reaches zero instead of looping
+@export var destroy_on_finish : bool = false ## If true and one_shot is enabled, queue_frees the node when the countdown finishes
 
 signal countdown_finished()
 
@@ -33,15 +33,15 @@ func _process(delta: float) -> void:
 		_elapsed -= count_length
 		count_down()
 
-func start() -> void:
+func start() -> void: ## Resets and starts the countdown from the initial count value
 	number = count
 	_elapsed = 0.0
 	_running = true
 
-func stop() -> void:
+func stop() -> void: ## Pauses the countdown without resetting the current number
 	_running = false
 
-func count_down() -> void:
+func count_down() -> void: ## Decrements the displayed number by 1; emits countdown_finished and handles one_shot/destroy logic at zero
 	var new_number = number - 1
 	if new_number >= 0:
 		number = new_number
