@@ -11,7 +11,9 @@ class_name CountDown2D
 @export var one_shot : bool = false ## If true, the countdown stops (and optionally destroys itself) when it reaches zero instead of looping
 @export var destroy_on_finish : bool = false ## If true and one_shot is enabled, queue_frees the node when the countdown finishes
 
-signal countdown_finished()
+signal countdown_finished ## Emitted when the countdown reaches zero
+signal countdown_started(starting_count: int) ## Emitted when the countdown begins running
+signal tick(remaining: int) ## Emitted on each decrement with the new remaining value
 
 var _running : bool = false
 var _elapsed : float = 0.0
@@ -24,6 +26,7 @@ func _ready() -> void:
 
 	if autostart:
 		_running = true
+		countdown_started.emit(count)
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint() or not _running:
@@ -37,6 +40,7 @@ func start() -> void: ## Resets and starts the countdown from the initial count 
 	number = count
 	_elapsed = 0.0
 	_running = true
+	countdown_started.emit(count)
 
 func stop() -> void: ## Pauses the countdown without resetting the current number
 	_running = false
@@ -45,6 +49,7 @@ func count_down() -> void: ## Decrements the displayed number by 1; emits countd
 	var new_number = number - 1
 	if new_number >= 0:
 		number = new_number
+		tick.emit(number)
 	else:
 		if one_shot:
 			_running = false

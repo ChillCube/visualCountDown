@@ -16,6 +16,13 @@ a node that will display a countdown on screen
 | **one_shot** | `bool` | `false` | If true, the countdown stops (and optionally destroys itself) when it reaches zero instead of looping |
 | **destroy_on_finish** | `bool` | `false` | If true and one_shot is enabled, queue_frees the node when the countdown finishes |
 
+### 🔔 Signals
+| Signal | Arguments | Description |
+| :--- | :--- | :--- |
+| **countdown_finished** | - |  Emitted when the countdown reaches zero |
+| **countdown_started** | `starting_count: int` |  Emitted when the countdown begins running |
+| **tick** | `remaining: int` |  Emitted on each decrement with the new remaining value |
+
 ### 🛠️ Methods
 | Method | Arguments | Returns | Description |
 | :--- | :--- | :--- | :--- |
